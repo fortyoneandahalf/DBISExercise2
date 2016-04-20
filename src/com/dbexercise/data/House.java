@@ -58,7 +58,7 @@ public class House extends Estate{
 				hou.setId(id);
 				hou.setFloors(rs.getInt("floors"));
 				hou.setPrice(rs.getFloat("price"));
-				hou.setGarden(rs.getBoolean("garden"));
+				hou.setGarden(rs.getInt("garden") != 0);
 				
 				Estate es = Estate.load(id);
 				
@@ -103,7 +103,7 @@ public class House extends Estate{
 				pstmt.setInt(1, getId());
 				pstmt.setInt(2, getFloors());
 				pstmt.setFloat(3, getPrice());
-				pstmt.setBoolean(4, isGarden());
+				pstmt.setInt(4, isGarden()? 1 : 0);
 				pstmt.executeUpdate();
 				pstmt.close();
 			} else {
@@ -118,12 +118,13 @@ public class House extends Estate{
 				// Set parameters of the prepared statements.
 				pstmt.setInt(1, getFloors());
 				pstmt.setFloat(2, getPrice());
-				pstmt.setBoolean(3, isGarden());
+				pstmt.setInt(3, isGarden()? 1 : 0);
 				pstmt.setInt(4, getId());
 				pstmt.executeUpdate();
 
 				pstmt.close();
 			}
+			con.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

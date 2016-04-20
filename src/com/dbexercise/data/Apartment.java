@@ -77,8 +77,8 @@ public class Apartment extends Estate{
 				ap.setFloor(rs.getInt("floor"));
 				ap.setRent(rs.getFloat("rent"));
 				ap.setRooms(rs.getInt("rooms"));
-				ap.setBalcony(rs.getBoolean("balcony"));
-				ap.setBuiltInKitchen(rs.getBoolean("builtinkitchen"));
+				ap.setBalcony(rs.getInt("balcony") != 0);
+				ap.setBuiltInKitchen(rs.getInt("builtinkitchen") != 0);
 				
 				Estate es = Estate.load(id);
 				
@@ -124,8 +124,8 @@ public class Apartment extends Estate{
 				pstmt.setInt(2, getFloor());
 				pstmt.setFloat(3, getRent());
 				pstmt.setInt(4, getRooms());
-				pstmt.setBoolean(5, isBalcony());
-				pstmt.setBoolean(6, isBuiltInKitchen());
+				pstmt.setInt(5, isBalcony()? 1 : 0);
+				pstmt.setInt(6, isBuiltInKitchen()? 1 : 0);
 				pstmt.executeUpdate();
 				pstmt.close();
 			} else {
@@ -141,13 +141,14 @@ public class Apartment extends Estate{
 				pstmt.setInt(1, getFloor());
 				pstmt.setFloat(2, getRent());
 				pstmt.setInt(3, getRooms());
-				pstmt.setBoolean(4, isBalcony());
-				pstmt.setBoolean(5, isBuiltInKitchen());
+				pstmt.setInt(4, isBalcony()? 1 : 0);
+				pstmt.setInt(5, isBuiltInKitchen()? 1 : 0);
 				pstmt.setInt(6, getId());
 				pstmt.executeUpdate();
 
 				pstmt.close();
 			}
+			con.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -1,5 +1,10 @@
 package com.dbexercise;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -161,14 +166,40 @@ public class EstateManagement {
 		      Statement stmt = con.createStatement();                                            
 		      System.out.println("**** Created JDBC Statement object");
 
+		      URL url = ClassLoader.getSystemResource("createTablesSimple.sql");
+		      
+		      String sql= "";
+		      Scanner scanIn = null;
+		      try {
+		    	  scanIn = new Scanner(new File(url.toURI()));
+		    	  while(scanIn.hasNext()){
+		    		  sql = scanIn.nextLine();
+		    		  sql = sql.replace(";", "");
+		    		  if(sql.length()>5){
+		    			  System.out.println(sql);
+		    			  stmt.executeUpdate(sql);
+		    		  }
+		    	  }
+		    	  //System.out.println(sql);
+		      } catch (FileNotFoundException e) {
+		    	  // TODO Auto-generated catch block
+		    	  e.printStackTrace();
+		      } catch (URISyntaxException e) {
+		    	  // TODO Auto-generated catch block
+		    	  e.printStackTrace();
+		      }
+		      
+		      //stmt.executeUpdate(sql);
+		      
+		      
 		      // Execute a query and generate a ResultSet instance
-		      ResultSet rs = stmt.executeQuery("SELECT a FROM tbl2");                    
+		      ResultSet rs = stmt.executeQuery("select TABNAME from syscat.tables where tabschema = 'VSISP51'");                    
 		      System.out.println("**** Created JDBC ResultSet object");
 
 		      // Print all of the employee numbers to standard output device
 		      while (rs.next()) {
-		        String empNo = rs.getString(1);
-		        System.out.println("Employee number = " + empNo);
+		        String col1 = rs.getString(1);
+		        System.out.println("Table name = " + col1);
 		      }
 		      System.out.println("**** Fetched all rows from JDBC ResultSet");
 		      // Close the ResultSet

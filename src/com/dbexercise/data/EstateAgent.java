@@ -130,6 +130,7 @@ public class EstateAgent {
 
 				pstmt.close();
 			}
+			con.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

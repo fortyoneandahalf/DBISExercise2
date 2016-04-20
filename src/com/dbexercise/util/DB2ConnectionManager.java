@@ -25,6 +25,7 @@ public class DB2ConnectionManager {
 			// Loads the driver.
 			Class.forName("com.ibm.db2.jcc.DB2Driver");
 			conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASS);
+			conn.setAutoCommit(false);
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

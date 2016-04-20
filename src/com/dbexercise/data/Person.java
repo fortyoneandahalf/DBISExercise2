@@ -124,6 +124,7 @@ public class Person {
 
 				pstmt.close();
 			}
+			con.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

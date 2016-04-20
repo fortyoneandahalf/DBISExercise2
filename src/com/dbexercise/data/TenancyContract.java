@@ -144,6 +144,7 @@ public class TenancyContract extends Contract {
 
 				pstmt.close();
 			}
+			con.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
