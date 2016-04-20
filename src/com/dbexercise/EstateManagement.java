@@ -167,6 +167,7 @@ public class EstateManagement {
 		      System.out.println("**** Created JDBC Statement object");
 
 		      URL url = ClassLoader.getSystemResource("createTablesSimple.sql");
+		      //URL url = ClassLoader.getSystemResource("DropAllTables.sql");
 		      
 		      String sql= "";
 		      Scanner scanIn = null;
