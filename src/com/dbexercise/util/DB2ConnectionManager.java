@@ -22,18 +22,7 @@ public class DB2ConnectionManager {
 	 */
 	private DB2ConnectionManager() {
 		try {
-//			// Read properties file
-//			Properties properties = new Properties();
-//			URL url = ClassLoader.getSystemResource("db2.properties");
-//			FileInputStream stream = new FileInputStream(new File(url.toURI()));
-//			properties.load(stream);
-//			stream.close();
-//
-//			String jdbcUser = properties.getProperty("jdbc_user");
-//			String jdbcPass = properties.getProperty("jdbc_pass");
-//			String jdbcUrl = properties.getProperty("jdbc_url");
-
-			// Verbindung zur DB2 herstellen
+			// Loads the driver.
 			Class.forName("com.ibm.db2.jcc.DB2Driver");
 			conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASS);
 
