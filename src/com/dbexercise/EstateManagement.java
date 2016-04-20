@@ -162,7 +162,7 @@ public class EstateManagement {
 		      System.out.println("**** Created JDBC Statement object");
 
 		      // Execute a query and generate a ResultSet instance
-		      ResultSet rs = stmt.executeQuery("SELECT EMPNO FROM EMPLOYEE");                    
+		      ResultSet rs = stmt.executeQuery("SELECT a FROM tbl2");                    
 		      System.out.println("**** Created JDBC ResultSet object");
 
 		      // Print all of the employee numbers to standard output device
