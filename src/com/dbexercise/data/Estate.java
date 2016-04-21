@@ -10,7 +10,7 @@ import com.dbexercise.util.DB2ConnectionManager;
 
 public class Estate {
 	private int id = -1;
-	private String login;
+	private EstateAgent estateAgent;
 	private String city;
 	private String postalCode;
 	private String street;
@@ -25,13 +25,13 @@ public class Estate {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public String getLogin() {
-		return login;
+	
+	public EstateAgent getEstateAgent() {
+		return estateAgent;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+	public void setEstateAgent(EstateAgent estateAgent) {
+		this.estateAgent = estateAgent;
 	}
 
 	public String getCity() {
@@ -94,7 +94,7 @@ public class Estate {
 			if (rs.next()) {
 				Estate es = new Estate();
 				es.setId(id);
-				es.setLogin(rs.getString("login"));
+				es.setEstateAgent(EstateAgent.load(rs.getString("login")));
 				es.setCity(rs.getString("city"));
 				es.setPostalCode(rs.getString("postalcode"));
 				es.setStreet(rs.getString("street"));
@@ -128,7 +128,7 @@ public class Estate {
 						Statement.RETURN_GENERATED_KEYS);
 
 				// Set parameters of the prepared statements.
-				pstmt.setString(1, getLogin());
+				pstmt.setString(1, getEstateAgent().getLogin());
 				pstmt.setString(2, getCity());
 				pstmt.setString(3, getPostalCode());
 				pstmt.setString(4, getStreet());
@@ -150,7 +150,7 @@ public class Estate {
 				PreparedStatement pstmt = con.prepareStatement(updateSQL);
 
 				// Set parameters of the prepared statements.
-				pstmt.setString(1, getLogin());
+				pstmt.setString(1, getEstateAgent().getLogin());
 				pstmt.setString(2, getCity());
 				pstmt.setString(3, getPostalCode());
 				pstmt.setString(4, getStreet());

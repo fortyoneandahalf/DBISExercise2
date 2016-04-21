@@ -66,7 +66,7 @@ public class EstateManagement {
 	public static void main(String[] args) {
 		//createTables();
 		//createInitialObjects();
-		showAllData();
+		//showAllData();
 		//new EstateManagement();
 	}
 	
@@ -187,10 +187,8 @@ public class EstateManagement {
 		    	  }
 		    	  System.out.println(sql);
 		      } catch (FileNotFoundException e) {
-		    	  // TODO Auto-generated catch block
 		    	  e.printStackTrace();
 		      } catch (URISyntaxException e) {
-		    	  // TODO Auto-generated catch block
 		    	  e.printStackTrace();
 		      }
 		      
@@ -250,10 +248,8 @@ public class EstateManagement {
 		    	  }
 		    	  System.out.println(sql);
 		      } catch (FileNotFoundException e) {
-		    	  // TODO Auto-generated catch block
 		    	  e.printStackTrace();
 		      } catch (URISyntaxException e) {
-		    	  // TODO Auto-generated catch block
 		    	  e.printStackTrace();
 		      }
 		      

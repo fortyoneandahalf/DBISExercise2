@@ -82,7 +82,7 @@ public class Apartment extends Estate{
 				
 				Estate es = Estate.load(id);
 				
-				ap.setLogin(es.getLogin());
+				ap.setEstateAgent(es.getEstateAgent());
 				ap.setCity(es.getCity());
 				ap.setPostalCode(es.getPostalCode());
 				ap.setStreet(es.getStreet());

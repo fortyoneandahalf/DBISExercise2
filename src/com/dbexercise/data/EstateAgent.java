@@ -55,12 +55,47 @@ public class EstateAgent {
 	}
 
 	/**
+	 * Load an estate agent from the database (given the login)
+	 * @param loadLogin
+	 * @param loadPassword
+	 * @return
+	 */
+	public static EstateAgent load(String loadLogin) {
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+
+			// Prepare Statement
+			String selectSQL = "SELECT * FROM estateagent WHERE login = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setString(1, loadLogin);
+
+			// Processing result
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				EstateAgent ea = new EstateAgent();
+				ea.setNewRecord(false);
+				ea.setLogin(loadLogin);
+				ea.setName(rs.getString("name"));
+				ea.setAddress(rs.getString("address"));
+				ea.setPassword(rs.getString("password"));
+				rs.close();
+				pstmt.close();
+				return ea;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
 	 * Load an estate agent from the database (given the login and password)
 	 * @param loadLogin
 	 * @param loadPassword
 	 * @return
 	 */
-	public static EstateAgent load(String loadLogin, String loadPassword) {
+	public static EstateAgent authenticatedLoad(String loadLogin, String loadPassword) {
 		try {
 			// Get connection
 			Connection con = DB2ConnectionManager.getInstance().getConnection();
@@ -135,4 +170,5 @@ public class EstateAgent {
 			e.printStackTrace();
 		}
 	}
+	
 }

@@ -62,7 +62,7 @@ public class House extends Estate{
 				
 				Estate es = Estate.load(id);
 				
-				hou.setLogin(es.getLogin());
+				hou.setEstateAgent(es.getEstateAgent());
 				hou.setCity(es.getCity());
 				hou.setPostalCode(es.getPostalCode());
 				hou.setStreet(es.getStreet());
