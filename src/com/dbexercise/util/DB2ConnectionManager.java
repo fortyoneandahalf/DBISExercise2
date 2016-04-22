@@ -54,5 +54,7 @@ public class DB2ConnectionManager {
 	public Connection getConnection() {
 		return conn;
 	}
+	
+	
 
 }

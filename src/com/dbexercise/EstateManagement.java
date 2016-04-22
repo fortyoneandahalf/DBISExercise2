@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
+import com.dbexercise.data.EstateAgent;
 import com.dbexercise.util.DB2ConnectionManager;
 
 public class EstateManagement {
@@ -66,8 +67,9 @@ public class EstateManagement {
 	public static void main(String[] args) {
 		//createTables();
 		//createInitialObjects();
-		//showAllData();
+		showAllData();
 		//new EstateManagement();
+		//System.out.println();
 	}
 	
 	public EstateManagement(){
@@ -118,23 +120,23 @@ public class EstateManagement {
 			int choice = displayMenu(EstateManagement.MENU_ESTATE_AGENTS_ITEMS);
 			switch (choice) {
 				case 1:
-					estateAgentManagementMode();
+					//Account creation for estate agent
+					EstateAgent.createNew();
 					break;
 				case 2:
-					estateManagementMode();
+					//Modify Account
+					EstateAgent.modify();
 					break;
 				case 3:
-					contractManagementMode();
+					//Delete Account
+					EstateAgent.delete();
 					break;
 				case 4:
 					//Exit
-					break;
+					return;
 				default:
 					System.out.println("Wrong choice! Try Again!");
 					break;
-			}
-			if (choice == 4){
-				break;
 			}
 		}
 	}

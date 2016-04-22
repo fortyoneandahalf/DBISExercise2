@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 import com.dbexercise.util.DB2ConnectionManager;
 
@@ -128,7 +129,7 @@ public class EstateAgent {
 	/**
 	 * Save an Estate to the database
 	 */
-	public void save() {
+	public boolean save() {
 		
 		try {
 			// Get connection
@@ -137,7 +138,6 @@ public class EstateAgent {
 			// If it is a new record
 			if (isNewRecord()) {
 				String insertSQL = "INSERT INTO estateagent (login, name, address, password) VALUES (?, ?, ?, ?)";
-
 				PreparedStatement pstmt = con.prepareStatement(insertSQL);
 
 				// Set parameters of the prepared statements.
@@ -166,8 +166,79 @@ public class EstateAgent {
 				pstmt.close();
 			}
 			con.commit();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/**
+	 * Delete an EstateAgent from the database
+	 */
+	public static void delete() {
+		System.out.println("Enter the EstateAgent login to delete:");
+		String login = (new Scanner(System.in).next());
+		
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+						
+			String deleteSQL = "DELETE FROM estateagent WHERE login = ?";
+			PreparedStatement pstmt = con.prepareStatement(deleteSQL);
+
+			// Set parameters of the prepared statement.
+			pstmt.setString(1, login);
+			pstmt.executeUpdate();
+			
+			pstmt.close();
+			con.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Create New EstateAgent -> the request for input dialogues/whatever it is called.
+	 * @return
+	 */
+	public static void createNew(){
+		Scanner scanIn = new Scanner(System.in);
+		EstateAgent ea = new EstateAgent();
+		ea.setNewRecord(true);
+		System.out.print("Enter a login:");
+		ea.setLogin(scanIn.next());
+		System.out.print("Enter your name:");
+		ea.setName(scanIn.next());
+		System.out.print("Enter your address:");
+		ea.setAddress(scanIn.next());
+		System.out.print("Enter a password:");
+		ea.setPassword(scanIn.next());
+		System.out.println("");
+		if(ea.save()){
+			System.out.println("Sucessfully Created New EstateAgent");
+		}else{
+			System.out.println("ERROR CREATING New EstateAgent");
+		}
+	}
+	
+	public static void modify(){
+		Scanner scanIn = new Scanner(System.in);
+		System.out.println("Enter your login for modification:");
+		EstateAgent ea = EstateAgent.load(scanIn.next());
+//		System.out.println("Enter your new login:");
+//		ea.setLogin(scanIn.next());
+		System.out.print("Enter your new name: ");
+		ea.setName(scanIn.next());
+		System.out.print("Enter your new address: ");
+		ea.setAddress(scanIn.next());
+		System.out.print("Enter your new password: ");
+		ea.setPassword(scanIn.next());
+		System.out.println("");
+		if(ea.save()){
+			System.out.println("Sucessfully Modified EstateAgent");
+		}else{
+			System.out.println("ERROR MODIFYING New EstateAgent");
 		}
 	}
 	
