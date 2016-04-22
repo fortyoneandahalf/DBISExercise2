@@ -113,8 +113,9 @@ public class Estate {
 	
 	/**
 	 * Save an Estate to the database
+	 * @return 
 	 */
-	public void save() {
+	public boolean save() {
 		
 		try {
 			// Get connection
@@ -162,8 +163,10 @@ public class Estate {
 				pstmt.close();
 			}
 			con.commit();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 }

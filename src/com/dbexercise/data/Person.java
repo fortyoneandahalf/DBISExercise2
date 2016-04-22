@@ -83,7 +83,7 @@ public class Person {
 	/**
 	 * Save a Person to the database
 	 */
-	public void save() {
+	public boolean save() {
 		
 		try {
 			// Get connection
@@ -125,8 +125,10 @@ public class Person {
 				pstmt.close();
 			}
 			con.commit();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 }

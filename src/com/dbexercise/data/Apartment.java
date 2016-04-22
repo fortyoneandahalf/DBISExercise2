@@ -102,7 +102,7 @@ public class Apartment extends Estate{
 	/**
 	 * Save an Apartment to the database
 	 */
-	public void save() {
+	public boolean save() {
 		
 		try {
 			// Get connection
@@ -130,13 +130,11 @@ public class Apartment extends Estate{
 				pstmt.close();
 			} else {
 				// If it is an existing record, Update the record.
-				
 				//Save the Estate part
 				super.save();
-				
 				String updateSQL = "UPDATE apartment SET floor = ?, rent = ?, rooms = ?, balcony = ?, builtinkitchen = ? WHERE id = ?";
 				PreparedStatement pstmt = con.prepareStatement(updateSQL);
-
+				
 				// Set parameters of the prepared statements.
 				pstmt.setInt(1, getFloor());
 				pstmt.setFloat(2, getRent());
@@ -145,12 +143,13 @@ public class Apartment extends Estate{
 				pstmt.setInt(5, isBuiltInKitchen()? 1 : 0);
 				pstmt.setInt(6, getId());
 				pstmt.executeUpdate();
-
 				pstmt.close();
 			}
 			con.commit();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 }
