@@ -40,20 +40,20 @@ public class EstateManagement {
             "4. Log out and return to Main Menu"};
 	
 	private static final String [] MENU_ESTATES_LEVEL_2_ITEMS = {
-			"MANAGEMENT MODE FOR ESTATES - Choose Property type",
+			"MANAGE ESTATES - Choose Property type",
 			"1. Apartment",
 			"2. House",
             "3. Back to MANAGEMENT MODE FOR ESTATES"};
 	
 	private static final String [] MENU_CONTRACT_LEVEL_1_ITEMS = {
 			"CONTRACT MANAGEMENT",
-			"1. Insert Persons",
-			"2. Sign (Create) Contracts",
+			"1. Create Person",
+			"2. Sign (Create) Contract",
 			"3. Overview of all Contracts",
             "4. Back to Main Menu"};
 	
 	private static final String [] MENU_CONTRACT_LEVEL_2_ITEMS = {
-			"CONTRACT MANAGEMENT - Choose Contract Type",
+			"CREATE NEW CONTRACT - Choose Contract Type",
 			"1. Purchase Contract (for House)",
 			"2. Tenancy Contract (for Apartment)",
 			"3. Back to CONTRACT MANAGEMENT"};
@@ -66,7 +66,7 @@ public class EstateManagement {
 	public static void main(String[] args) {
 		//createTables();
 		//createInitialObjects();
-		showAllData();
+		//showAllData();
 		new EstateManagement();
 		//System.out.println();
 	}
@@ -79,10 +79,10 @@ public class EstateManagement {
 					estateAgentManagementMode();
 					break;
 				case 2:
-					estateManagementMode();
+					estateManagementModeLevel1();
 					break;
 				case 3:
-					contractManagementMode();
+					contractManagementModeLevel1();
 					break;
 				case 4:
 					//Exit
@@ -114,33 +114,45 @@ public class EstateManagement {
 	}
 	
 	private void estateAgentManagementMode(){
-		//1. Management mode for estate agents
-		while(true){
-			int choice = displayMenu(EstateManagement.MENU_ESTATE_AGENTS_ITEMS);
-			switch (choice) {
-				case 1:
-					//Account creation for estate agent
-					EstateAgent.createNew();
-					break;
-				case 2:
-					//Modify Account
-					EstateAgent.modify();
-					break;
-				case 3:
-					//Delete Account
-					EstateAgent.delete();
-					break;
-				case 4:
-					//Exit
-					return;
-				default:
-					System.out.println("Wrong choice! Try Again!");
-					break;
+		String hardCodedPassword = "pac";
+		
+		System.out.println("Enter your password:");
+		String password = new Scanner(System.in).next();
+		//System.out.println("password entered: " + password);
+		if(password.equals(hardCodedPassword))
+		{
+			while(true){
+				int choice = displayMenu(EstateManagement.MENU_ESTATE_AGENTS_ITEMS);
+				switch (choice) {
+					case 1:
+						//Account creation for estate agent
+						EstateAgent.createNew();
+						break;
+					case 2:
+						//Modify Account
+						EstateAgent.modify();
+						break;
+					case 3:
+						//Delete Account
+						EstateAgent.delete();
+						break;
+					case 4:
+						//Exit
+						return;
+					default:
+						System.out.println("Wrong choice! Try Again!");
+						break;
+				}
 			}
+		}
+		else
+		{
+			System.out.println("Wrong password. Back to main.");
+			return;
 		}
 	}
 	
-	private void estateManagementMode(){
+	private void estateManagementModeLevel1(){
 		//2. Management mode for estates
 		System.out.println("Management Mode for estates");
 		System.out.println("You have to login as the estate agent to use this feature.");
@@ -161,18 +173,23 @@ public class EstateManagement {
 			switch (choice) {
 				case 1:
 					//CREATE ESTATE
-					System.out.println("CREATE NEW ESTATE");
-					//TODO complete this thing
+					estateManagementModeLevel2();
 					break;
 				case 2:
 					//MODIFY ESTATE
 					System.out.println("Modify existing ESTATE");
-					//TODO complete this thing
+					//TODO - prompt for estate ID
+					//TODO - display house details
+					//TODO - display menu for selecting field to modify
+					//TODO - Save estate to DB
 					break;
 				case 3:
 					//DELETE ESTATE
 					System.out.println("Delete ESTATE");
-					//TODO complete this thing
+					//TODO - prompt for estate ID
+					//TODO - display apartment details
+					//TODO - ask for confirm or cancel delete
+					//TODO - do delete
 					break;
 				case 4:
 					//Exit
@@ -185,13 +202,99 @@ public class EstateManagement {
 		
 	}
 	
-	private void contractManagementMode(){
-		//3. Contract management
-		
+	private void displayHouse(int estateID)
+	{
+		//TODO - fetch data for estateID
+		//TODO - display data on console
 	}
 	
+	private void displayApartment(int estateID)
+	{
+		//TODO - fetch data for estateID
+		//TODO - display data on console
+	}
+	
+	private void estateManagementModeLevel2() {
+		//Choose property type to create
+		while(true){
+			int choice = displayMenu(EstateManagement.MENU_ESTATES_LEVEL_2_ITEMS);
+			switch (choice) {
+				case 1:
+					//1. Apartment
+					System.out.println("Create Apartment");
+					//TODO - apartment creation interface
+					break;
+				case 2:
+					//2. House
+					System.out.println("Create House");
+					//TODO - house creation interface
+					break;
+				case 3:
+					//Exit
+					return;
+				default:
+					System.out.println("Wrong choice! Try Again!");
+					break;
+			}
+		}
+	}
+	
+	private void contractManagementModeLevel1(){
+		//3. Contract management
+		while(true){
+			int choice = displayMenu(EstateManagement.MENU_CONTRACT_LEVEL_1_ITEMS);
+			switch (choice) {
+				case 1:
+					//1. Create person
+					createPersonMode();
+					break;
+				case 2:
+					//2. Create new contract
+					contractManagementModeLevel2();
+					break;
+				case 3:
+					//3. View all contracts
+					//TODO complete this thing
+					break;
+				case 4:
+					//Exit
+					return;
+				default:
+					System.out.println("Wrong choice! Try Again!");
+					break;
+			}
+		}
+	}
+	
+	private void contractManagementModeLevel2() {
+		//Create new contract
+		while(true){
+			int choice = displayMenu(EstateManagement.MENU_CONTRACT_LEVEL_2_ITEMS);
+			switch (choice) {
+				case 1:
+					//1. Create purchase contract
+					//TODO
+					System.out.println("Create purchase contract");
+					break;
+				case 2:
+					//2. Create tenancy contract
+					//TODO
+					System.out.println("Create tenancy contract");
+					break;
+				case 3:
+					//Exit
+					return;
+				default:
+					System.out.println("Wrong choice! Try Again!");
+					break;
+			}
+		}
+	}
+
 	private void createPersonMode() {
 		// TODO Auto-generated method stub
+		
+		System.out.println("Create new person");
 		 
 		// Create new Person object
 		Person person = new Person();
