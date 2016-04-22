@@ -82,7 +82,7 @@ public class House extends Estate{
 	/**
 	 * Save a House to the database
 	 */
-	public void save() {
+	public boolean save() {
 		
 		try {
 			// Get connection
@@ -125,8 +125,10 @@ public class House extends Estate{
 				pstmt.close();
 			}
 			con.commit();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 }

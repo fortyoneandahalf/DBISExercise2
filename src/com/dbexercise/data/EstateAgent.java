@@ -207,13 +207,16 @@ public class EstateAgent {
 		EstateAgent ea = new EstateAgent();
 		ea.setNewRecord(true);
 		System.out.print("Enter a login:");
-		ea.setLogin(scanIn.next());
+		ea.setLogin(scanIn.nextLine());
+		scanIn.nextLine();
 		System.out.print("Enter your name:");
-		ea.setName(scanIn.next());
+		ea.setName(scanIn.nextLine());
+		scanIn.nextLine();
 		System.out.print("Enter your address:");
-		ea.setAddress(scanIn.next());
+		ea.setAddress(scanIn.nextLine());
+		scanIn.nextLine();
 		System.out.print("Enter a password:");
-		ea.setPassword(scanIn.next());
+		ea.setPassword(scanIn.nextLine());
 		System.out.println("");
 		if(ea.save()){
 			System.out.println("Sucessfully Created New EstateAgent");
@@ -225,15 +228,18 @@ public class EstateAgent {
 	public static void modify(){
 		Scanner scanIn = new Scanner(System.in);
 		System.out.println("Enter your login for modification:");
-		EstateAgent ea = EstateAgent.load(scanIn.next());
+		EstateAgent ea = EstateAgent.load(scanIn.nextLine());
+		scanIn.nextLine();
 //		System.out.println("Enter your new login:");
 //		ea.setLogin(scanIn.next());
-		System.out.print("Enter your new name: ");
-		ea.setName(scanIn.next());
-		System.out.print("Enter your new address: ");
-		ea.setAddress(scanIn.next());
-		System.out.print("Enter your new password: ");
-		ea.setPassword(scanIn.next());
+		System.out.print("Enter your name:");
+		ea.setName(scanIn.nextLine());
+		scanIn.nextLine();
+		System.out.print("Enter your address:");
+		ea.setAddress(scanIn.nextLine());
+		scanIn.nextLine();
+		System.out.print("Enter a password:");
+		ea.setPassword(scanIn.nextLine());
 		System.out.println("");
 		if(ea.save()){
 			System.out.println("Sucessfully Modified EstateAgent");

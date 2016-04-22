@@ -73,7 +73,7 @@ public class Contract {
 	/**
 	 * Save a Contract to the database
 	 */
-	public void save() {
+	public boolean save() {
 		
 		try {
 			// Get connection
@@ -113,8 +113,10 @@ public class Contract {
 				pstmt.close();
 			}
 			con.commit();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 }
