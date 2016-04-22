@@ -54,6 +54,14 @@ public class EstateAgent {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	
+
+	@Override
+	public String toString() {
+		return "EstateAgent [login=" + login + ", name=" + name + ", address=" + address
+				+ ", password=" + password + "]";
+	}
 
 	/**
 	 * Load an estate agent from the database (given the login)
@@ -168,7 +176,8 @@ public class EstateAgent {
 			con.commit();
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("YOU DID SOMETHING WRONG!");
 			return false;
 		}
 	}
@@ -193,9 +202,12 @@ public class EstateAgent {
 			
 			pstmt.close();
 			con.commit();
+			System.out.println("Sucessfully Deleted EstateAgent: "+login);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("ERROR Deleting EstateAgent");
 		}
+		
 	}
 	
 	/**
@@ -217,6 +229,7 @@ public class EstateAgent {
 		System.out.println("");
 		if(ea.save()){
 			System.out.println("Sucessfully Created New EstateAgent");
+			System.out.println(ea);
 		}else{
 			System.out.println("ERROR CREATING New EstateAgent");
 		}
@@ -224,22 +237,26 @@ public class EstateAgent {
 	
 	public static void modify(){
 		Scanner scanIn = new Scanner(System.in);
-		System.out.println("Enter your login for modification:");
+		System.out.println("Enter the login for modification:");
 		EstateAgent ea = EstateAgent.load(scanIn.nextLine());
-//		System.out.println("Enter your new login:");
-//		ea.setLogin(scanIn.next());
-		System.out.print("Enter your name:");
-		ea.setName(scanIn.nextLine());
-		System.out.print("Enter your address:");
-		ea.setAddress(scanIn.nextLine());
-		System.out.print("Enter a password:");
-		ea.setPassword(scanIn.nextLine());
-		System.out.println("");
-		if(ea.save()){
-			System.out.println("Sucessfully Modified EstateAgent");
-		}else{
-			System.out.println("ERROR MODIFYING New EstateAgent");
+		System.out.println("Current details:"+ea);
+		if(ea!=null){
+			System.out.println("Enter your new login:");
+			ea.setLogin(scanIn.next());
+			System.out.print("Enter the new name:");
+			ea.setName(scanIn.nextLine());
+			System.out.print("Enter the new address:");
+			ea.setAddress(scanIn.nextLine());
+			System.out.print("Enter the new password:");
+			ea.setPassword(scanIn.nextLine());
+			System.out.println("");
+			if(ea.save()){
+				System.out.println("Sucessfully Modified EstateAgent");
+				System.out.println("New details:"+ea);
+				return;
+			}
 		}
+		System.out.println("ERROR MODIFYING New EstateAgent");
 	}
 	
 }

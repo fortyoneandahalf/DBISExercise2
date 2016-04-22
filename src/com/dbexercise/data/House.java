@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 import com.dbexercise.util.DB2ConnectionManager;
 
@@ -36,6 +37,11 @@ public class House extends Estate{
 		this.garden = garden;
 	}
 
+	@Override
+	public String toString() {
+		return "Apartment [" + super.toString() + "floor=" + floors + ", price=" + price + ", garden=" + garden + "]";
+	}
+	
 	/**
 	 * Load a House from the database (given the id)
 	 * @param id
@@ -131,4 +137,34 @@ public class House extends Estate{
 			return false;
 		}
 	}
+	
+	public static void createNewHouse(EstateAgent ea){
+		House hou = new House();
+		Estate es = Estate.createNewEstate(ea);
+		
+		hou.setEstateAgent(es.getEstateAgent());
+		hou.setCity(es.getCity());
+		hou.setPostalCode(es.getPostalCode());
+		hou.setStreet(es.getStreet());
+		hou.setStreetNumber(es.getStreetNumber());
+		hou.setSquareArea(es.getSquareArea());
+		
+		Scanner scanIn = new Scanner(System.in);
+		System.out.print("Enter Number of Floors: ");
+		hou.setFloors(scanIn.nextInt());
+		System.out.print("Enter Price: ");
+		hou.setPrice(scanIn.nextFloat());
+		System.out.print("Enter garden (True/False): ");
+		hou.setGarden(scanIn.nextBoolean());
+		
+		
+		if(hou.save()){
+			System.out.println("Sucessfully Created New House");
+			System.out.println(hou);
+		}else{
+			System.out.println("ERROR CREATING New House");
+		}
+		
+	}
+	
 }

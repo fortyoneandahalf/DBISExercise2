@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 import com.dbexercise.util.DB2ConnectionManager;
 
@@ -54,6 +55,15 @@ public class Apartment extends Estate{
 		this.builtInKitchen = builtInKitchen;
 	}
 
+	
+	
+
+	@Override
+	public String toString() {
+		return "Apartment [" + super.toString() + "floor=" + floor + ", rent=" + rent + ", rooms=" + rooms + ", balcony=" + balcony
+				+ ", builtInKitchen=" + builtInKitchen + "]";
+	}
+
 	/**
 	 * Load an Apartment from the database (given the id)
 	 * @param id
@@ -97,6 +107,10 @@ public class Apartment extends Estate{
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static void listValidApartments(EstateAgent ea){
+		
 	}
 	
 	/**
@@ -151,5 +165,43 @@ public class Apartment extends Estate{
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public static void createNewApartment(EstateAgent ea){
+		Apartment ap = new Apartment();
+		Estate es = Estate.createNewEstate(ea);
+		ap.setEstateAgent(es.getEstateAgent());
+		ap.setCity(es.getCity());
+		ap.setPostalCode(es.getPostalCode());
+		ap.setStreet(es.getStreet());
+		ap.setStreetNumber(es.getStreetNumber());
+		ap.setSquareArea(es.getSquareArea());
+		
+		Scanner scanIn = new Scanner(System.in);
+		System.out.print("Enter Floor: ");
+		ap.setFloor(scanIn.nextInt());
+		System.out.print("Enter Rent: ");
+		ap.setRent(scanIn.nextFloat());
+		System.out.print("Enter Number of Rooms: ");
+		ap.setRooms(scanIn.nextInt());
+		System.out.print("Enter balcony (True/False): ");
+		ap.setBalcony(scanIn.nextBoolean());
+		System.out.print("Enter builtinkitchen (True/False): ");
+		ap.setBuiltInKitchen(scanIn.nextBoolean());
+		
+		
+		if(ap.save()){
+			System.out.println("Sucessfully Created New Apartment");
+			System.out.println(ap);
+		}else{
+			System.out.println("ERROR CREATING New Apartment");
+		}
+		
+	}
+	
+	//TODO TRY IT OUT
+	public void modifyApartment(int estateId){
+		//DisplayApartment
+		
 	}
 }

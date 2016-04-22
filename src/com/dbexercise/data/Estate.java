@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 
 import com.dbexercise.util.DB2ConnectionManager;
 
@@ -72,6 +73,14 @@ public class Estate {
 
 	public void setSquareArea(float squareArea) {
 		this.squareArea = squareArea;
+	}
+	
+	
+
+	@Override
+	public String toString() {
+		return " id=" + id + ", estateAgent=" + estateAgent.getLogin() + ", city=" + city + ", postalCode=" + postalCode
+				+ ", street=" + street + ", streetNumber=" + streetNumber + ", squareArea=" + squareArea + " ";
 	}
 
 	/**
@@ -169,4 +178,22 @@ public class Estate {
 			return false;
 		}
 	}
+	
+	public static Estate createNewEstate(EstateAgent ea){
+		Estate es = new Estate();
+		Scanner scanIn = new Scanner(System.in);
+		es.setEstateAgent(ea);
+		System.out.print("Enter City: ");
+		es.setCity(scanIn.nextLine());
+		System.out.print("Enter Postal Code: ");
+		es.setPostalCode(scanIn.nextLine());
+		System.out.print("Enter Street: ");
+		es.setStreet(scanIn.nextLine());
+		System.out.print("Enter Street Number: ");
+		es.setStreetNumber(scanIn.nextLine());
+		System.out.print("Enter Square Area: ");
+		es.setSquareArea(scanIn.nextFloat());
+		return es;
+	}
+	
 }

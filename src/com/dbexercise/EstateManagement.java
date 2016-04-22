@@ -12,7 +12,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
+import com.dbexercise.data.Apartment;
 import com.dbexercise.data.EstateAgent;
+import com.dbexercise.data.House;
 import com.dbexercise.data.Person;
 import com.dbexercise.util.DB2ConnectionManager;
 
@@ -23,7 +25,8 @@ public class EstateManagement {
 			"1. Management mode for estate agents",
 			"2. Management mode for estates",
 			"3. Contract management",
-			"4. Exit"};
+			"4. Exit",
+			"5. DEBUG: LIST EVERY TABLE CONTENT"};
 	
 	private static final String [] MENU_ESTATE_AGENTS_ITEMS = {
 			"MANAGEMENT MODE FOR ESTATE AGENTS",
@@ -93,6 +96,9 @@ public class EstateManagement {
 					break;
 				case 4:
 					//Exit
+					break;
+				case 5:
+					showAllData();
 					break;
 				default:
 					System.out.println("Wrong choice! Try Again!");
@@ -185,21 +191,24 @@ public class EstateManagement {
 				case 2:
 					//MODIFY ESTATE
 					System.out.println("Modify existing ESTATE");
+					//TODO - Display list of valid estates for that login.
 					//TODO - prompt for estate ID
-					//TODO - display house details
-					//TODO - display menu for selecting field to modify
+					//TODO - display house/apartment details
+					//TODO - modify everything
 					//TODO - Save estate to DB
+					//TODO - display new record
 					break;
 				case 3:
 					//DELETE ESTATE
 					System.out.println("Delete ESTATE");
+					//TODO - Display list of valid estates for that login.
 					//TODO - prompt for estate ID
-					//TODO - display apartment details
-					//TODO - ask for confirm or cancel delete
-					//TODO - do delete
+					//TODO - display house/apartment details
+					//TODO - DELETE FROM FB
 					break;
 				case 4:
 					//Exit
+					currentEstateAgent = null;
 					return;
 				default:
 					System.out.println("Wrong choice! Try Again!");
@@ -229,11 +238,12 @@ public class EstateManagement {
 				case 1:
 					//1. Apartment
 					System.out.println("Create Apartment");
-					//TODO - apartment creation interface
+					Apartment.createNewApartment(currentEstateAgent);
 					break;
 				case 2:
 					//2. House
 					System.out.println("Create House");
+					House.createNewHouse(currentEstateAgent);
 					//TODO - house creation interface
 					break;
 				case 3:
