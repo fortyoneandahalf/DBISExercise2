@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 import com.dbexercise.data.EstateAgent;
+import com.dbexercise.data.Person;
 import com.dbexercise.util.DB2ConnectionManager;
 
 public class EstateManagement {
@@ -189,7 +190,20 @@ public class EstateManagement {
 		
 	}
 	
-	
+	private void createPersonMode() {
+		// TODO Auto-generated method stub
+		 
+		// Create new Person object
+		Person person = new Person();
+		
+		// Prompt for name, first name and address (in order of your choice)
+		
+		// Validate that e.g. fields are not blank
+		
+		// Call person.save()
+		
+		// Go back to contract management mode (should happen automatically!)
+	}
 	
 	
 	
