@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
+import com.dbexercise.data.Person;
 import com.dbexercise.data.EstateAgent;
 import com.dbexercise.util.DB2ConnectionManager;
 
@@ -67,8 +68,8 @@ public class EstateManagement {
 	public static void main(String[] args) {
 		//createTables();
 		//createInitialObjects();
-		showAllData();
-		//new EstateManagement();
+		//showAllData();
+		new EstateManagement();
 		//System.out.println();
 	}
 	
@@ -143,12 +144,57 @@ public class EstateManagement {
 	
 	private void estateManagementMode(){
 		//2. Management mode for estates
-		
+		while(true){
+			int choice = displayMenu(EstateManagement.MENU_ESTATES_LEVEL_1_ITEMS);
+			switch (choice) {
+				case 1:
+					//Login
+					
+					//TODO: Validate estate agent
+					
+					estateManagementModeLevel2();
+					
+					break;
+				case 2:
+					//Back to main menu
+					return;
+				default:
+					System.out.println("Wrong choice! Try Again!");
+					break;
+			}
+		}
 	}
 	
+	private void estateManagementModeLevel2() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private void contractManagementMode(){
 		//3. Contract management
-		
+		while(true){
+			int choice = displayMenu(EstateManagement.MENU_CONTRACT_LEVEL_1_ITEMS);
+			switch (choice) {
+				case 1:
+					//1. Create person
+					createPersonMode();
+					break;
+				case 2:
+					//2. Create contract
+					
+					break;
+				case 3:
+					//3. See all contracts
+					
+					break;
+				case 4:
+					//4. Back to main menu
+					return;
+				default:
+					System.out.println("Wrong choice! Try Again!");
+					break;
+			}
+		}
 	}
 	
 	
@@ -158,6 +204,21 @@ public class EstateManagement {
 	
 	
 	
+	private void createPersonMode() {
+		// TODO Auto-generated method stub
+		
+		// Create new Person object
+		Person person = new Person();
+		
+		// Prompt for name, first name and address (in order of your choice)
+		
+		// Validate that e.g. fields are not blank
+		
+		// Call person.save()
+		
+		// Go back to contract management mode (should happen automatically!)
+	}
+
 	public static void createTables(){
 		System.out.println("Hello");
 		try {
