@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
-import com.dbexercise.data.Person;
 import com.dbexercise.data.EstateAgent;
 import com.dbexercise.util.DB2ConnectionManager;
 
@@ -33,18 +32,13 @@ public class EstateManagement {
             "4. Back to Main Menu"};
 	
 	private static final String [] MENU_ESTATES_LEVEL_1_ITEMS = {
-			"MANAGEMENT MODE FOR ESTATES",
-			"1. Log In",
-            "2. Back to Main Menu"};
-	
-	private static final String [] MENU_ESTATES_LEVEL_2_ITEMS = {
 			"MANAGEMENT MODE FOR ESTATES - Logged In",
 			"1. Create Estate",
 			"2. Modify Estate",
-			"3. Update Estate",
+			"3. Delete Estate",
             "4. Log out and return to Main Menu"};
 	
-	private static final String [] MENU_ESTATES_LEVEL_3_ITEMS = {
+	private static final String [] MENU_ESTATES_LEVEL_2_ITEMS = {
 			"MANAGEMENT MODE FOR ESTATES - Choose Property type",
 			"1. Apartment",
 			"2. House",
@@ -64,11 +58,14 @@ public class EstateManagement {
 			"3. Back to CONTRACT MANAGEMENT"};
 	
 	
+	private EstateAgent currentEstateAgent = null;
+	
+	
 
 	public static void main(String[] args) {
 		//createTables();
 		//createInitialObjects();
-		//showAllData();
+		showAllData();
 		new EstateManagement();
 		//System.out.println();
 	}
@@ -117,97 +114,79 @@ public class EstateManagement {
 	
 	private void estateAgentManagementMode(){
 		//1. Management mode for estate agents
-		String hardCodedPassword = "pac";
-		
-		System.out.println("Enter your password:");
-		String password = new Scanner(System.in).next();
-		//System.out.println("password entered: " + password);
-		if(password.equals(hardCodedPassword))
-		{
-			while(true){
-				int choice = displayMenu(EstateManagement.MENU_ESTATE_AGENTS_ITEMS);
-				switch (choice) {
-					case 1:
-						//Account creation for estate agent
-						EstateAgent.createNew();
-						break;
-					case 2:
-						//Modify Account
-						EstateAgent.modify();
-						break;
-					case 3:
-						//Delete Account
-						EstateAgent.delete();
-						break;
-					case 4:
-						//Exit
-						return;
-					default:
-						System.out.println("Wrong choice! Try Again!");
-						break;
-				}
+		while(true){
+			int choice = displayMenu(EstateManagement.MENU_ESTATE_AGENTS_ITEMS);
+			switch (choice) {
+				case 1:
+					//Account creation for estate agent
+					EstateAgent.createNew();
+					break;
+				case 2:
+					//Modify Account
+					EstateAgent.modify();
+					break;
+				case 3:
+					//Delete Account
+					EstateAgent.delete();
+					break;
+				case 4:
+					//Exit
+					return;
+				default:
+					System.out.println("Wrong choice! Try Again!");
+					break;
 			}
-		}
-		else
-		{
-			System.out.println("Wrong password. Back to main.");
-			return;
 		}
 	}
 	
 	private void estateManagementMode(){
 		//2. Management mode for estates
+		System.out.println("Management Mode for estates");
+		System.out.println("You have to login as the estate agent to use this feature.");
+		Scanner scanIn = new Scanner(System.in);
+		System.out.print("Enter your login: ");
+		String login = scanIn.nextLine();
+		System.out.println("Enter your password: ");
+		String password = scanIn.nextLine();
+		currentEstateAgent = EstateAgent.authenticatedLoad(login, password);
+		
+		if(currentEstateAgent==null){
+			System.out.println("Wrong login and password combination");
+			return;
+		}
+		System.out.println("Correct Login credentials");
 		while(true){
 			int choice = displayMenu(EstateManagement.MENU_ESTATES_LEVEL_1_ITEMS);
 			switch (choice) {
 				case 1:
-					//Login
-					
-					//TODO: Validate estate agent
-					
-					estateManagementModeLevel2();
-					
+					//CREATE ESTATE
+					System.out.println("CREATE NEW ESTATE");
+					//TODO complete this thing
 					break;
 				case 2:
-					//Back to main menu
-					return;
-				default:
-					System.out.println("Wrong choice! Try Again!");
-					break;
-			}
-		}
-	}
-	
-	private void estateManagementModeLevel2() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void contractManagementMode(){
-		//3. Contract management
-		while(true){
-			int choice = displayMenu(EstateManagement.MENU_CONTRACT_LEVEL_1_ITEMS);
-			switch (choice) {
-				case 1:
-					//1. Create person
-					createPersonMode();
-					break;
-				case 2:
-					//2. Create contract
-					
+					//MODIFY ESTATE
+					System.out.println("Modify existing ESTATE");
+					//TODO complete this thing
 					break;
 				case 3:
-					//3. See all contracts
-					
+					//DELETE ESTATE
+					System.out.println("Delete ESTATE");
+					//TODO complete this thing
 					break;
 				case 4:
-					//4. Back to main menu
+					//Exit
 					return;
 				default:
 					System.out.println("Wrong choice! Try Again!");
 					break;
 			}
 		}
+		
+	}
+	
+	private void contractManagementMode(){
+		//3. Contract management
+		
 	}
 	
 	
@@ -217,21 +196,6 @@ public class EstateManagement {
 	
 	
 	
-	private void createPersonMode() {
-		// TODO Auto-generated method stub
-		
-		// Create new Person object
-		Person person = new Person();
-		
-		// Prompt for name, first name and address (in order of your choice)
-		
-		// Validate that e.g. fields are not blank
-		
-		// Call person.save()
-		
-		// Go back to contract management mode (should happen automatically!)
-	}
-
 	public static void createTables(){
 		System.out.println("Hello");
 		try {
