@@ -88,7 +88,7 @@ public class PurchaseContract extends Contract {
 	/**
 	 * Save a Purchase Contract to the database
 	 */
-	public void save() {
+	public boolean save() {
 		
 		try {
 			// Get connection
@@ -133,8 +133,10 @@ public class PurchaseContract extends Contract {
 				pstmt.close();
 			}
 			con.commit();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 }
