@@ -67,8 +67,8 @@ public class EstateManagement {
 	public static void main(String[] args) {
 		//createTables();
 		//createInitialObjects();
-		showAllData();
-		//new EstateManagement();
+		//showAllData();
+		new EstateManagement();
 		//System.out.println();
 	}
 	
@@ -116,28 +116,41 @@ public class EstateManagement {
 	
 	private void estateAgentManagementMode(){
 		//1. Management mode for estate agents
-		while(true){
-			int choice = displayMenu(EstateManagement.MENU_ESTATE_AGENTS_ITEMS);
-			switch (choice) {
-				case 1:
-					//Account creation for estate agent
-					EstateAgent.createNew();
-					break;
-				case 2:
-					//Modify Account
-					EstateAgent.modify();
-					break;
-				case 3:
-					//Delete Account
-					EstateAgent.delete();
-					break;
-				case 4:
-					//Exit
-					return;
-				default:
-					System.out.println("Wrong choice! Try Again!");
-					break;
+		String hardCodedPassword = "pac";
+		
+		System.out.println("Enter your password:");
+		String password = new Scanner(System.in).next();
+		//System.out.println("password entered: " + password);
+		if(password.equals(hardCodedPassword))
+		{
+			while(true){
+				int choice = displayMenu(EstateManagement.MENU_ESTATE_AGENTS_ITEMS);
+				switch (choice) {
+					case 1:
+						//Account creation for estate agent
+						EstateAgent.createNew();
+						break;
+					case 2:
+						//Modify Account
+						EstateAgent.modify();
+						break;
+					case 3:
+						//Delete Account
+						EstateAgent.delete();
+						break;
+					case 4:
+						//Exit
+						return;
+					default:
+						System.out.println("Wrong choice! Try Again!");
+						break;
+				}
 			}
+		}
+		else
+		{
+			System.out.println("Wrong password. Back to main.");
+			return;
 		}
 	}
 	
