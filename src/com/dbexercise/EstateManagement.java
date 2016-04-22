@@ -69,6 +69,13 @@ public class EstateManagement {
 		//showAllData();
 		new EstateManagement();
 		//System.out.println();
+		
+		try {
+			DB2ConnectionManager.getInstance().getConnection().close();
+		} catch (SQLException e) {
+			System.out.println("Warning: could not close DB connection.");
+		}
+		
 	}
 	
 	public EstateManagement(){
