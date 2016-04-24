@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 
 import com.dbexercise.util.DB2ConnectionManager;
 
@@ -45,6 +46,11 @@ public class Person {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	
+	@Override
+	public String toString() {
+		return "Person [id=" + id + ", firstName=" + firstName + ", name=" + name + ", address=" + address + "]";
+	}
 
 	/**
 	 * Load a person from the database (given the id)
@@ -72,8 +78,10 @@ public class Person {
 				
 				rs.close();
 				pstmt.close();
+				DB2ConnectionManager.getInstance().closeConnection();;
 				return p;
 			}
+			DB2ConnectionManager.getInstance().closeConnection();;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -125,10 +133,92 @@ public class Person {
 				pstmt.close();
 			}
 			con.commit();
+			DB2ConnectionManager.getInstance().closeConnection();;
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
+	
+	public static void createNewPerson(){
+		Person p = new Person();
+		Scanner scanIn = new Scanner(System.in);
+		
+		System.out.print("Enter First Name: ");
+		p.setFirstName(scanIn.nextLine());
+		System.out.print("Enter Name: ");
+		p.setName(scanIn.nextLine());
+		System.out.print("Enter Address: ");
+		p.setAddress(scanIn.nextLine());
+		
+		
+		if(p.save()){
+			System.out.println("Sucessfully Created New Person");
+			System.out.println(p);
+		}else{
+			System.out.println("ERROR CREATING New Person");
+		}
+		
+	}
+	
+	public static void listAllPersons(){
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+			
+			// Prepare Statement
+			String selectSQL = "SELECT * FROM person";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+
+			// Processing result
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Person p = new Person();
+				p.setId(rs.getInt("id"));
+				p.setFirstName(rs.getString("firstname"));
+				p.setName(rs.getString("name"));
+				p.setAddress(rs.getString("address"));
+				
+				System.out.println(p);
+			}
+			rs.close();
+			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static boolean isValidPerson(int id){
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+			
+			// Prepare Statement
+			String selectSQL = "SELECT * FROM person where id = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setInt(1, id);
+
+			// Processing result
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()){
+				rs.close();
+				pstmt.close();
+				DB2ConnectionManager.getInstance().closeConnection();;
+				return true;
+			}
+			
+			rs.close();
+			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
+			return false;
+			
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.out.println("ERROR: Query cannot be executed!");
+			return false;
+		}
+	}
+	
 }

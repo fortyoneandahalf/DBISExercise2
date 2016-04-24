@@ -52,7 +52,22 @@ public class DB2ConnectionManager {
 	 * @return Connection
 	 */
 	public Connection getConnection() {
+		try {
+			if(conn.isClosed()){
+				instance = new DB2ConnectionManager();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return conn;
+	}
+	
+	public void closeConnection(){
+		try {
+			conn.close();
+		} catch (SQLException e) {
+		}
 	}
 	
 	

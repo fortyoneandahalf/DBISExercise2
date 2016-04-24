@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 import com.dbexercise.util.DB2ConnectionManager;
 
@@ -45,6 +46,14 @@ public class PurchaseContract extends Contract {
 	public void setPerson(Person person) {
 		this.person = person;
 	}
+	
+	
+
+	@Override
+	public String toString() {
+		return "PurchaseContract ["+super.toString()+", noOfInstallments=" + noOfInstallments + ", interestRate=" + interestRate + ", houseId="
+				+ house.getId() + ", personId=" + person.getId() + "]";
+	}
 
 	/**
 	 * Load a Purchase Contract from the database (given the contractNo)
@@ -77,8 +86,10 @@ public class PurchaseContract extends Contract {
 				
 				rs.close();
 				pstmt.close();
+				DB2ConnectionManager.getInstance().closeConnection();;
 				return pc;
 			}
+			DB2ConnectionManager.getInstance().closeConnection();;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -133,6 +144,7 @@ public class PurchaseContract extends Contract {
 				pstmt.close();
 			}
 			con.commit();
+			DB2ConnectionManager.getInstance().closeConnection();;
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -158,10 +170,57 @@ public class PurchaseContract extends Contract {
 			}
 			rs.close();
 			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("ERROR loading ContractNo Using House ID");
 		}
 		return contractNo;
 	}
+	
+	public static void createNewPurchaseContract(House h, Person p){
+		PurchaseContract pc = new PurchaseContract();
+		pc.setHouse(h);
+		pc.setPerson(p);
+		
+		Contract c = Contract.createNewContract();
+		pc.setDate(c.getDate());
+		pc.setPlace(c.getPlace());
+		
+		Scanner scanIn = new Scanner(System.in);
+		System.out.print("Enter the number of installments: ");
+		pc.setNoOfInstallments(scanIn.nextInt());
+		System.out.print("Enter the interest rate (Float): ");
+		pc.setInterestRate(scanIn.nextFloat());
+		
+		if(pc.save()){
+			System.out.println("Sucessfully Created Purchase Contract");
+			System.out.println(pc);
+		}else{
+			System.out.println("ERROR CREATING Purchase Contract");
+		}
+	}
+	
+	public static void listAllPurchaseContracts(){
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+			
+			// Prepare Statement
+			String selectSQL = "SELECT * FROM purchasecontract";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+
+			// Processing result
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				System.out.println(PurchaseContract.load(rs.getInt("contractno")));
+			}
+			rs.close();
+			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

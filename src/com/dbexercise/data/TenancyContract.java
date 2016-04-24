@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 import com.dbexercise.util.DB2ConnectionManager;
 
@@ -54,6 +55,12 @@ public class TenancyContract extends Contract {
 	public void setPerson(Person person) {
 		this.person = person;
 	}
+	
+	@Override
+	public String toString() {
+		return "TenancyContract ["+super.toString()+", startDate=" + startDate + ", duration=" + duration + ", additionalCosts="
+				+ additionalCosts + ", apartmentId=" + apartment.getId() + ", personId=" + person.getId() + "]";
+	}
 
 	/**
 	 * Load a Tenancy Contract from the database (given the contractNo)
@@ -87,8 +94,10 @@ public class TenancyContract extends Contract {
 				
 				rs.close();
 				pstmt.close();
+				DB2ConnectionManager.getInstance().closeConnection();;
 				return tc;
 			}
+			DB2ConnectionManager.getInstance().closeConnection();;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -145,6 +154,7 @@ public class TenancyContract extends Contract {
 				pstmt.close();
 			}
 			con.commit();
+			DB2ConnectionManager.getInstance().closeConnection();;
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -170,10 +180,58 @@ public class TenancyContract extends Contract {
 			}
 			rs.close();
 			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("ERROR loading ContractNo Using Apartment ID");
 		}
 		return contractNo;
+	}
+	
+	public static void createNewTenancyContract(Apartment a, Person p){
+		TenancyContract tc = new TenancyContract();
+		tc.setApartment(a);
+		tc.setPerson(p);
+		
+		Contract c = Contract.createNewContract();
+		tc.setDate(c.getDate());
+		tc.setPlace(c.getPlace());
+		
+		Scanner scanIn = new Scanner(System.in);
+		System.out.print("Enter the start date: ");
+		tc.setStartDate(scanIn.nextLine());
+		System.out.print("Enter the duration (int): ");
+		tc.setDuration(scanIn.nextInt());
+		System.out.print("Enter the Additional costs: ");
+		tc.setAdditionalCosts(scanIn.nextFloat());
+		
+		if(tc.save()){
+			System.out.println("Sucessfully Created Tenancy Contract");
+			System.out.println(tc);
+		}else{
+			System.out.println("ERROR CREATING Tenancy Contract");
+		}
+	}
+	
+	public static void listAllTenancyContracts(){
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+			
+			// Prepare Statement
+			String selectSQL = "SELECT * FROM tenancycontract";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+
+			// Processing result
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				System.out.println(TenancyContract.load(rs.getInt("contractno")));
+			}
+			rs.close();
+			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

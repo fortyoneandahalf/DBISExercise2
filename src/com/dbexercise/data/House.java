@@ -77,8 +77,10 @@ public class House extends Estate{
 				
 				rs.close();
 				pstmt.close();
+				DB2ConnectionManager.getInstance().closeConnection();;
 				return hou;
 			}
+			DB2ConnectionManager.getInstance().closeConnection();;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -117,12 +119,50 @@ public class House extends Estate{
 			}
 			rs.close();
 			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static boolean isValidApartment(EstateAgent ea, int estateId){
+	public static void listFreeHouses(){
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+			
+			// Prepare Statement
+			String selectSQL = "SELECT * FROM house, estate WHERE house.id = estate.id AND house.id NOT IN (SELECT houseid from purchasecontract)";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+
+			// Processing result
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				House hou = new House();
+				hou.setId(rs.getInt("id"));
+				hou.setFloors(rs.getInt("floors"));
+				hou.setPrice(rs.getFloat("price"));
+				hou.setGarden(rs.getInt("garden") != 0);
+				
+				Estate es = Estate.load(hou.getId());
+				
+				hou.setEstateAgent(es.getEstateAgent());
+				hou.setCity(es.getCity());
+				hou.setPostalCode(es.getPostalCode());
+				hou.setStreet(es.getStreet());
+				hou.setStreetNumber(es.getStreetNumber());
+				hou.setSquareArea(es.getSquareArea());
+				
+				System.out.println(hou);
+			}
+			rs.close();
+			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static boolean isValidHouse(EstateAgent ea, int estateId){
 		try {
 			// Get connection
 			Connection con = DB2ConnectionManager.getInstance().getConnection();
@@ -143,8 +183,37 @@ public class House extends Estate{
 			
 			rs.close();
 			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
 			return false;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.out.println("ERROR: Query cannot be executed!");
+			return false;
+		}
+	}
+	
+	public static boolean isValidFreeHouse(int id){
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
 			
+			// Prepare Statement
+			String selectSQL = "SELECT * FROM house, estate WHERE house.id = estate.id AND house.id NOT IN (SELECT houseid from purchasecontract) AND house.id = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setInt(1, id);
+
+			// Processing result
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()){
+				rs.close();
+				pstmt.close();
+				return true;
+			}
+			
+			rs.close();
+			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
+			return false;
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.out.println("ERROR: Query cannot be executed!");
@@ -198,6 +267,7 @@ public class House extends Estate{
 				pstmt.close();
 			}
 			con.commit();
+			DB2ConnectionManager.getInstance().closeConnection();;
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();

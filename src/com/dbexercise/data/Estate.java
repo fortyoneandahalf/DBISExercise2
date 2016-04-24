@@ -112,8 +112,10 @@ public class Estate {
 				
 				rs.close();
 				pstmt.close();
+				DB2ConnectionManager.getInstance().closeConnection();;
 				return es;
 			}
+			DB2ConnectionManager.getInstance().closeConnection();;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -171,6 +173,7 @@ public class Estate {
 
 				pstmt.close();
 			}
+			DB2ConnectionManager.getInstance().closeConnection();;
 			con.commit();
 			return true;
 		} catch (SQLException e) {
@@ -223,6 +226,7 @@ public class Estate {
 			// Processing result
 			pstmt.executeUpdate();
 			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -90,8 +90,10 @@ public class EstateAgent {
 				ea.setPassword(rs.getString("password"));
 				rs.close();
 				pstmt.close();
+				DB2ConnectionManager.getInstance().closeConnection();
 				return ea;
 			}
+			DB2ConnectionManager.getInstance().closeConnection();;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -126,8 +128,10 @@ public class EstateAgent {
 				ea.setPassword(loadPassword);
 				rs.close();
 				pstmt.close();
+				DB2ConnectionManager.getInstance().closeConnection();;
 				return ea;
 			}
+			DB2ConnectionManager.getInstance().closeConnection();;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -174,6 +178,7 @@ public class EstateAgent {
 				pstmt.close();
 			}
 			con.commit();
+			DB2ConnectionManager.getInstance().closeConnection();;
 			return true;
 		} catch (SQLException e) {
 			//e.printStackTrace();
@@ -202,6 +207,7 @@ public class EstateAgent {
 			
 			pstmt.close();
 			con.commit();
+			DB2ConnectionManager.getInstance().closeConnection();;
 			System.out.println("Sucessfully Deleted EstateAgent: "+login);
 		} catch (SQLException e) {
 			//e.printStackTrace();

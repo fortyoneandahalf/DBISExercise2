@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 
 import com.dbexercise.util.DB2ConnectionManager;
 
@@ -37,6 +38,11 @@ public class Contract {
 		this.place = place;
 	}
 
+	@Override
+	public String toString() {
+		return "contractNo=" + contractNo + ", date=" + date + ", place=" + place;
+	}
+
 	/**
 	 * Load a contract from the database (given the contractNo)
 	 * @param id
@@ -62,8 +68,10 @@ public class Contract {
 				
 				rs.close();
 				pstmt.close();
+				DB2ConnectionManager.getInstance().closeConnection();;
 				return c;
 			}
+			DB2ConnectionManager.getInstance().closeConnection();;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -113,6 +121,7 @@ public class Contract {
 				pstmt.close();
 			}
 			con.commit();
+			DB2ConnectionManager.getInstance().closeConnection();;
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -133,10 +142,21 @@ public class Contract {
 			// Processing result
 			pstmt.executeUpdate();
 			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public static Contract createNewContract(){
+		Contract c = new Contract();
+		Scanner scanIn = new Scanner(System.in);
+		System.out.print("Enter date: ");
+		c.setDate(scanIn.nextLine());
+		System.out.print("Enter place: ");
+		c.setPlace(scanIn.nextLine());
+		return c;
 	}
 }

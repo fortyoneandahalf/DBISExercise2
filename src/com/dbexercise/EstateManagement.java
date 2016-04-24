@@ -1,12 +1,10 @@
 package com.dbexercise;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,6 +14,8 @@ import com.dbexercise.data.Apartment;
 import com.dbexercise.data.EstateAgent;
 import com.dbexercise.data.House;
 import com.dbexercise.data.Person;
+import com.dbexercise.data.PurchaseContract;
+import com.dbexercise.data.TenancyContract;
 import com.dbexercise.util.DB2ConnectionManager;
 
 public class EstateManagement {
@@ -25,8 +25,7 @@ public class EstateManagement {
 			"1. Management mode for estate agents",
 			"2. Management mode for estates",
 			"3. Contract management",
-			"4. Exit",
-			"5. DEBUG: LIST EVERY TABLE CONTENT"};
+			"4. Exit"};
 	
 	private static final String [] MENU_ESTATE_AGENTS_ITEMS = {
 			"MANAGEMENT MODE FOR ESTATE AGENTS",
@@ -73,11 +72,7 @@ public class EstateManagement {
 		new EstateManagement();
 		//System.out.println();
 		
-		try {
-			DB2ConnectionManager.getInstance().getConnection().close();
-		} catch (SQLException e) {
-			System.out.println("Warning: could not close DB connection.");
-		}
+		DB2ConnectionManager.getInstance().closeConnection();
 		
 	}
 	
@@ -96,9 +91,6 @@ public class EstateManagement {
 					break;
 				case 4:
 					//Exit
-					break;
-				case 5:
-					showAllData();
 					break;
 				default:
 					System.out.println("Wrong choice! Try Again!");
@@ -200,7 +192,7 @@ public class EstateManagement {
 						//Modify Apartment
 						System.out.println("Modifying Apartment");
 						Apartment.modifyApartment(estateId);
-					}else if(House.isValidApartment(currentEstateAgent, estateId)){
+					}else if(House.isValidHouse(currentEstateAgent, estateId)){
 						//Modify House
 						System.out.println("Modifying House");
 						House.modifyHouse(estateId);
@@ -220,7 +212,7 @@ public class EstateManagement {
 						//Delete Apartment
 						System.out.println("Deleting Apartment");
 						Apartment.delete(estateId1);
-					}else if(House.isValidApartment(currentEstateAgent, estateId1)){
+					}else if(House.isValidHouse(currentEstateAgent, estateId1)){
 						//Delete House
 						System.out.println("Deleting House");
 						House.delete(estateId1);
@@ -238,18 +230,6 @@ public class EstateManagement {
 			}
 		}
 		
-	}
-	
-	private void displayHouse(int estateID)
-	{
-		//TODO - fetch data for estateID
-		//TODO - display data on console
-	}
-	
-	private void displayApartment(int estateID)
-	{
-		//TODO - fetch data for estateID
-		//TODO - display data on console
 	}
 	
 	private void estateManagementModeLevel2() {
@@ -284,7 +264,8 @@ public class EstateManagement {
 			switch (choice) {
 				case 1:
 					//1. Create person
-					createPersonMode();
+					System.out.println("Create new person");
+					Person.createNewPerson();
 					break;
 				case 2:
 					//2. Create new contract
@@ -292,7 +273,8 @@ public class EstateManagement {
 					break;
 				case 3:
 					//3. View all contracts
-					//TODO complete this thing
+					TenancyContract.listAllTenancyContracts();
+					PurchaseContract.listAllPurchaseContracts();
 					break;
 				case 4:
 					//Exit
@@ -306,18 +288,59 @@ public class EstateManagement {
 	
 	private void contractManagementModeLevel2() {
 		//Create new contract
+		Scanner scanIn = new Scanner(System.in);
 		while(true){
 			int choice = displayMenu(EstateManagement.MENU_CONTRACT_LEVEL_2_ITEMS);
 			switch (choice) {
 				case 1:
 					//1. Create purchase contract
-					//TODO
-					System.out.println("Create purchase contract");
+					//Display all Houses
+					//Choose House
+					//Display all Persons
+					//Choose Person
+					//Fill in the remaining fields
+					//Save to DB
+					System.out.println("Create purchase contract (for House)");
+					House.listFreeHouses();
+					System.out.println("Enter House ID: ");
+					int houseId = scanIn.nextInt();
+					if(!House.isValidFreeHouse(houseId)){
+						System.out.println("Incorrect choice of House ID");
+						break;
+					}
+					Person.listAllPersons();
+					System.out.println("Enter Person ID: ");
+					int personId = scanIn.nextInt();
+					if(!Person.isValidPerson(personId)){
+						System.out.println("Incorrect choice of Person ID");
+						break;
+					}
+					PurchaseContract.createNewPurchaseContract(House.load(houseId), Person.load(personId));
 					break;
 				case 2:
 					//2. Create tenancy contract
-					//TODO
-					System.out.println("Create tenancy contract");
+					//Display all Apartments
+					//Choose Apartment
+					//Display all Persons
+					//Choose Person
+					//Fill in the remaining fields
+					//Save to DB
+					System.out.println("Create tenancy contract (for Apartment)");
+					Apartment.listFreeApartments();
+					System.out.println("Enter Apartment ID: ");
+					int apartmentId = scanIn.nextInt();
+					if(!Apartment.isValidFreeApartment(apartmentId)){
+						System.out.println("Incorrect choice of Apartment ID");
+						break;
+					}
+					Person.listAllPersons();
+					System.out.println("Enter Person ID: ");
+					int personId1 = scanIn.nextInt();
+					if(!Person.isValidPerson(personId1)){
+						System.out.println("Incorrect choice of Person ID");
+						break;
+					}
+					TenancyContract.createNewTenancyContract(Apartment.load(apartmentId), Person.load(personId1));
 					break;
 				case 3:
 					//Exit
@@ -329,22 +352,7 @@ public class EstateManagement {
 		}
 	}
 
-	private void createPersonMode() {
-		// TODO Auto-generated method stub
-		
-		System.out.println("Create new person");
-		 
-		// Create new Person object
-		Person person = new Person();
-		
-		// Prompt for name, first name and address (in order of your choice)
-		
-		// Validate that e.g. fields are not blank
-		
-		// Call person.save()
-		
-		// Go back to contract management mode (should happen automatically!)
-	}
+	
 	
 	
 	

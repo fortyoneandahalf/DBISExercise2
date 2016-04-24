@@ -101,8 +101,10 @@ public class Apartment extends Estate{
 				
 				rs.close();
 				pstmt.close();
+				DB2ConnectionManager.getInstance().closeConnection();;
 				return ap;
 			}
+			DB2ConnectionManager.getInstance().closeConnection();;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -143,6 +145,46 @@ public class Apartment extends Estate{
 			}
 			rs.close();
 			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void listFreeApartments(){
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+			
+			// Prepare Statement
+			String selectSQL = "SELECT * FROM apartment, estate WHERE apartment.id = estate.id AND apartment.id NOT IN (SELECT apartmentid from tenancycontract)";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+
+			// Processing result
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Apartment ap = new Apartment();
+				ap.setId(rs.getInt("id"));
+				ap.setFloor(rs.getInt("floor"));
+				ap.setRent(rs.getFloat("rent"));
+				ap.setRooms(rs.getInt("rooms"));
+				ap.setBalcony(rs.getInt("balcony") != 0);
+				ap.setBuiltInKitchen(rs.getInt("builtinkitchen") != 0);
+				
+				Estate es = Estate.load(ap.getId());
+				
+				ap.setEstateAgent(es.getEstateAgent());
+				ap.setCity(es.getCity());
+				ap.setPostalCode(es.getPostalCode());
+				ap.setStreet(es.getStreet());
+				ap.setStreetNumber(es.getStreetNumber());
+				ap.setSquareArea(es.getSquareArea());
+				
+				System.out.println(ap);
+			}
+			rs.close();
+			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -169,6 +211,37 @@ public class Apartment extends Estate{
 			
 			rs.close();
 			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
+			return false;
+			
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.out.println("ERROR: Query cannot be executed!");
+			return false;
+		}
+	}
+	
+	public static boolean isValidFreeApartment(int id){
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+			
+			// Prepare Statement
+			String selectSQL = "SELECT * FROM apartment, estate WHERE apartment.id = estate.id AND apartment.id NOT IN (SELECT apartmentid from tenancycontract) AND apartment.id = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setInt(1, id);
+
+			// Processing result
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()){
+				rs.close();
+				pstmt.close();
+				return true;
+			}
+			
+			rs.close();
+			pstmt.close();
+			DB2ConnectionManager.getInstance().closeConnection();;
 			return false;
 			
 		} catch (SQLException e) {
@@ -225,6 +298,7 @@ public class Apartment extends Estate{
 				pstmt.close();
 			}
 			con.commit();
+			DB2ConnectionManager.getInstance().closeConnection();;
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
