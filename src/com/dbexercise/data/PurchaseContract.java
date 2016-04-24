@@ -139,4 +139,29 @@ public class PurchaseContract extends Contract {
 			return false;
 		}
 	}
+	
+	public static int loadContractNoUsingHouseId(int id) {
+		int contractNo = -1;
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+
+			// Prepare Statement
+			String selectSQL = "SELECT contractno FROM purchasecontract WHERE houseid = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setInt(1, id);
+
+			// Processing result
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				contractNo = rs.getInt("contractno");
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("ERROR loading ContractNo Using House ID");
+		}
+		return contractNo;
+	}
 }

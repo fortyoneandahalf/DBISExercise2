@@ -119,4 +119,24 @@ public class Contract {
 			return false;
 		}
 	}
+	
+	public static boolean delete(int contractNo) {
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+
+			// Prepare Statement
+			String selectSQL = "DELETE * FROM contract WHERE contractno = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setInt(1, contractNo);
+
+			// Processing result
+			pstmt.executeUpdate();
+			pstmt.close();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

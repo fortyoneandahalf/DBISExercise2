@@ -39,7 +39,7 @@ public class House extends Estate{
 
 	@Override
 	public String toString() {
-		return "Apartment [" + super.toString() + "floor=" + floors + ", price=" + price + ", garden=" + garden + "]";
+		return "House [" + super.toString() + "floor=" + floors + ", price=" + price + ", garden=" + garden + "]";
 	}
 	
 	/**
@@ -83,6 +83,73 @@ public class House extends Estate{
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static void listValidHouses(EstateAgent ea){
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+			
+			// Prepare Statement
+			String selectSQL = "SELECT * FROM house, estate WHERE house.id = estate.id AND estate.login = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setString(1, ea.getLogin());
+
+			// Processing result
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				House hou = new House();
+				hou.setId(rs.getInt("id"));
+				hou.setFloors(rs.getInt("floors"));
+				hou.setPrice(rs.getFloat("price"));
+				hou.setGarden(rs.getInt("garden") != 0);
+				
+				Estate es = Estate.load(hou.getId());
+				
+				hou.setEstateAgent(es.getEstateAgent());
+				hou.setCity(es.getCity());
+				hou.setPostalCode(es.getPostalCode());
+				hou.setStreet(es.getStreet());
+				hou.setStreetNumber(es.getStreetNumber());
+				hou.setSquareArea(es.getSquareArea());
+				
+				System.out.println(hou);
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static boolean isValidApartment(EstateAgent ea, int estateId){
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+			
+			// Prepare Statement
+			String selectSQL = "SELECT * FROM house, estate WHERE house.id = estate.id AND estate.login = ? AND estate.id = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setString(1, ea.getLogin());
+			pstmt.setInt(2, estateId);
+
+			// Processing result
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()){
+				rs.close();
+				pstmt.close();
+				return true;
+			}
+			
+			rs.close();
+			pstmt.close();
+			return false;
+			
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.out.println("ERROR: Query cannot be executed!");
+			return false;
+		}
 	}
 	
 	/**
@@ -164,6 +231,41 @@ public class House extends Estate{
 		}else{
 			System.out.println("ERROR CREATING New House");
 		}
+		
+	}
+	
+	public static void modifyHouse(int estateId){
+		//DisplayApartment
+		House hou = House.load(estateId);
+		System.out.println(hou);
+		Estate.modifyEstate(hou);
+		
+		Scanner scanIn = new Scanner(System.in);
+		System.out.print("Enter New Number of Floors: ");
+		hou.setFloors(scanIn.nextInt());
+		System.out.print("Enter New Price: ");
+		hou.setPrice(scanIn.nextFloat());
+		System.out.print("Enter New garden (True/False): ");
+		hou.setGarden(scanIn.nextBoolean());
+		
+		if(hou.save()){
+			System.out.println("Sucessfully Modified House");
+			System.out.println(hou);
+		}else{
+			System.out.println("ERROR MODIFYING House");
+		}
+	}
+	
+	public static boolean delete(int id){
+		//FIND CONTRACT
+		int contractNo = PurchaseContract.loadContractNoUsingHouseId(id);
+		if(contractNo != -1){
+			//CONTRACT FOUND!
+			//DELETE CONTRACT (Subsequently it deletes the record in the tenancyContract inherited table)
+			Contract.delete(contractNo);
+		}
+		//DELETE ESTATE (Subsequently it deletes the record in the Apartment inherited table)
+		return Estate.delete(id);
 		
 	}
 	

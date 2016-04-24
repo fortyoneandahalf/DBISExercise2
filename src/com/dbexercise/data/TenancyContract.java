@@ -151,4 +151,29 @@ public class TenancyContract extends Contract {
 			return false;
 		}
 	}
+	
+	public static int loadContractNoUsingApartmentId(int id) {
+		int contractNo = -1;
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+
+			// Prepare Statement
+			String selectSQL = "SELECT contractno FROM tenancycontract WHERE apartmentid = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setInt(1, id);
+
+			// Processing result
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				contractNo = rs.getInt("contractno");
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("ERROR loading ContractNo Using Apartment ID");
+		}
+		return contractNo;
+	}
 }

@@ -191,20 +191,42 @@ public class EstateManagement {
 				case 2:
 					//MODIFY ESTATE
 					System.out.println("Modify existing ESTATE");
-					//TODO - Display list of valid estates for that login.
-					//TODO - prompt for estate ID
-					//TODO - display house/apartment details
-					//TODO - modify everything
-					//TODO - Save estate to DB
-					//TODO - display new record
+					System.out.println("List of estates owned by "+currentEstateAgent.getLogin());
+					Apartment.listValidApartments(currentEstateAgent);
+					House.listValidHouses(currentEstateAgent);
+					System.out.println("\nChoose an estate ID for modification.");
+					int estateId = scanIn.nextInt();
+					if(Apartment.isValidApartment(currentEstateAgent, estateId)){
+						//Modify Apartment
+						System.out.println("Modifying Apartment");
+						Apartment.modifyApartment(estateId);
+					}else if(House.isValidApartment(currentEstateAgent, estateId)){
+						//Modify House
+						System.out.println("Modifying House");
+						House.modifyHouse(estateId);
+					}else{
+						System.out.println("That's not your estate!");
+					}
 					break;
 				case 3:
 					//DELETE ESTATE
 					System.out.println("Delete ESTATE");
-					//TODO - Display list of valid estates for that login.
-					//TODO - prompt for estate ID
-					//TODO - display house/apartment details
-					//TODO - DELETE FROM FB
+					System.out.println("List of estates owned by "+currentEstateAgent.getLogin());
+					Apartment.listValidApartments(currentEstateAgent);
+					House.listValidHouses(currentEstateAgent);
+					System.out.println("\nChoose an estate ID for deletion.");
+					int estateId1 = scanIn.nextInt();
+					if(Apartment.isValidApartment(currentEstateAgent, estateId1)){
+						//Delete Apartment
+						System.out.println("Deleting Apartment");
+						Apartment.delete(estateId1);
+					}else if(House.isValidApartment(currentEstateAgent, estateId1)){
+						//Delete House
+						System.out.println("Deleting House");
+						House.delete(estateId1);
+					}else{
+						System.out.println("That's not your estate!");
+					}
 					break;
 				case 4:
 					//Exit
@@ -244,7 +266,6 @@ public class EstateManagement {
 					//2. House
 					System.out.println("Create House");
 					House.createNewHouse(currentEstateAgent);
-					//TODO - house creation interface
 					break;
 				case 3:
 					//Exit

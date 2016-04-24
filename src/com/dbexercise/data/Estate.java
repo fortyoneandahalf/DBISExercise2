@@ -80,7 +80,7 @@ public class Estate {
 	@Override
 	public String toString() {
 		return " id=" + id + ", estateAgent=" + estateAgent.getLogin() + ", city=" + city + ", postalCode=" + postalCode
-				+ ", street=" + street + ", streetNumber=" + streetNumber + ", squareArea=" + squareArea + " ";
+				+ ", street=" + street + ", streetNumber=" + streetNumber + ", squareArea=" + squareArea + ", ";
 	}
 
 	/**
@@ -194,6 +194,40 @@ public class Estate {
 		System.out.print("Enter Square Area: ");
 		es.setSquareArea(scanIn.nextFloat());
 		return es;
+	}
+	
+	public static void modifyEstate(Estate es){
+		Scanner scanIn = new Scanner(System.in);
+		System.out.print("Enter New City: ");
+		es.setCity(scanIn.nextLine());
+		System.out.print("Enter New Postal Code: ");
+		es.setPostalCode(scanIn.nextLine());
+		System.out.print("Enter New Street: ");
+		es.setStreet(scanIn.nextLine());
+		System.out.print("Enter New Street Number: ");
+		es.setStreetNumber(scanIn.nextLine());
+		System.out.print("Enter New Square Area: ");
+		es.setSquareArea(scanIn.nextFloat());
+	}
+	
+	public static boolean delete(int id) {
+		try {
+			// Get connection
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+
+			// Prepare Statement
+			String selectSQL = "DELETE * FROM FROM estate WHERE id = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setInt(1, id);
+
+			// Processing result
+			pstmt.executeUpdate();
+			pstmt.close();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 }
