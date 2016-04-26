@@ -173,8 +173,8 @@ public class Estate {
 
 				pstmt.close();
 			}
-			DB2ConnectionManager.getInstance().closeConnection();;
 			con.commit();
+			DB2ConnectionManager.getInstance().closeConnection();;
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
