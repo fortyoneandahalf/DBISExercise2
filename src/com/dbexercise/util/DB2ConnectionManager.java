@@ -64,10 +64,11 @@ public class DB2ConnectionManager {
 	}
 	
 	public void closeConnection(){
-		try {
-			conn.close();
-		} catch (SQLException e) {
-		}
+//		try {
+//			conn.close();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	

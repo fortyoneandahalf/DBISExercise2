@@ -72,7 +72,12 @@ public class EstateManagement {
 		new EstateManagement();
 		//System.out.println();
 		
-		DB2ConnectionManager.getInstance().closeConnection();
+		try {
+			DB2ConnectionManager.getInstance().getConnection().close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
