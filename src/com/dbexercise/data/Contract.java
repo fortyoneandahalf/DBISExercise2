@@ -142,6 +142,7 @@ public class Contract {
 			// Processing result
 			pstmt.executeUpdate();
 			pstmt.close();
+			con.commit();
 			DB2ConnectionManager.getInstance().closeConnection();;
 			return true;
 		} catch (SQLException e) {
