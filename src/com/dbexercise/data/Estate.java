@@ -219,14 +219,15 @@ public class Estate {
 			Connection con = DB2ConnectionManager.getInstance().getConnection();
 
 			// Prepare Statement
-			String selectSQL = "DELETE * FROM FROM estate WHERE id = ?";
+			String selectSQL = "DELETE FROM estate WHERE id = ?";
 			PreparedStatement pstmt = con.prepareStatement(selectSQL);
 			pstmt.setInt(1, id);
 
 			// Processing result
 			pstmt.executeUpdate();
 			pstmt.close();
-			DB2ConnectionManager.getInstance().closeConnection();;
+			con.commit();
+			DB2ConnectionManager.getInstance().closeConnection();
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
