@@ -97,6 +97,8 @@ public class EstateManagement {
 				case 4:
 					//Exit
 					break;
+				case 5:
+					showAllData();break;
 				default:
 					System.out.println("Wrong choice! Try Again!");
 					break;

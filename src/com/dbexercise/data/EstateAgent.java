@@ -247,8 +247,8 @@ public class EstateAgent {
 		EstateAgent ea = EstateAgent.load(scanIn.nextLine());
 		System.out.println("Current details:"+ea);
 		if(ea!=null){
-			System.out.println("Enter your new login:");
-			ea.setLogin(scanIn.nextLine());
+//			System.out.println("Enter your new login:");
+//			ea.setLogin(scanIn.nextLine());
 			System.out.print("Enter the new name:");
 			ea.setName(scanIn.nextLine());
 			System.out.print("Enter the new address:");
