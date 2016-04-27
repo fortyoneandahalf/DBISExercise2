@@ -60,7 +60,8 @@ public class EstateAgent {
 	@Override
 	public String toString() {
 		return "EstateAgent [login=" + login + ", name=" + name + ", address=" + address
-				+ ", password=" + password + "]";
+//				+ ", password=" + password + "]";
+				+ "]";
 	}
 
 	/**
